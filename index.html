@@ -3,47 +3,52 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0b0d10">
+    <meta name="theme-color" content="#000000">
     <meta name="robots" content="index, follow">
-    <title>Sphere — Focus without shrinking your world</title>
-    <meta name="description" content="Sphere understands what belongs to your work—and intervenes when you drift. Join the waitlist for the macOS focus guard.">
+    <title>Sphere — A focus guard for macOS</title>
+    <meta name="description" content="Sphere is a focus guard for macOS. Tell Sphere what you’re working on. It notices when a page or app doesn’t belong. Join the waitlist.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Sphere">
-    <meta property="og:title" content="Sphere — Focus without shrinking your world">
-    <meta property="og:description" content="Sphere understands what belongs to your work—and intervenes when you drift. Join the waitlist for the macOS focus guard.">
+    <meta property="og:title" content="Sphere — A focus guard for macOS">
+    <meta property="og:description" content="Sphere is a focus guard for macOS. Tell Sphere what you’re working on. It notices when a page or app doesn’t belong. Join the waitlist.">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sphere — Focus without shrinking your world">
-    <meta name="twitter:description" content="Sphere understands what belongs to your work—and intervenes when you drift. Join the waitlist for the macOS focus guard.">
+    <meta name="twitter:title" content="Sphere — A focus guard for macOS">
+    <meta name="twitter:description" content="Sphere is a focus guard for macOS. Tell Sphere what you’re working on. It notices when a page or app doesn’t belong. Join the waitlist.">
     <link rel="canonical" href="https://spherefocus.app/">
     <meta property="og:url" content="https://spherefocus.app/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/assets/styles.css">
+    <link rel="stylesheet" href="/assets/prelaunch.css">
     <script src="/assets/site.js" type="module"></script>
     <script src="/assets/waitlist.js" type="module"></script>
   </head>
   <body class="prelaunch-home">
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <header class="site-header prelaunch-header">
-      <div class="nav-shell">
-        <a class="brand" href="/" aria-label="Sphere home">
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span>Sphere</span>
-        </a>
-      </div>
-    </header>
     <main id="main">
 
-    <section class="waitlist-hero section-dark">
-      <div class="waitlist-atmosphere" aria-hidden="true"></div>
-      <div class="wrap waitlist-hero-grid">
-        <div class="waitlist-hero-copy">
-          <p class="eyebrow">A focus guard for macOS</p>
-          <h1>Sphere understands what belongs to your work—and intervenes when you drift.</h1>
-          <p class="waitlist-lede">
-            Tell Sphere what you're working on. It understands the pages and apps
-            that belong—and the ones that don't.
-          </p>
+    <section class="hero">
+      <div class="hero-object" aria-hidden="true">
+        <canvas
+          class="sphere-canvas"
+          data-sphere
+          data-dots="1600"
+          data-ink="#dfe3ec"
+          data-drift
+          data-spin
+        ></canvas>
+      </div>
+      <p class="hero-mark">Sphere</p>
+      <p class="hero-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        Coming soon
+      </p>
+      <div class="hero-copy">
+        <h1>A focus guard for macOS.</h1>
+        <p class="hero-desc">
+          Tell Sphere what you’re working on. It notices when a page
+          or app doesn’t belong.
+        </p>
+        <div class="waitlist-card">
 
     <form
       class="waitlist-form"
@@ -57,28 +62,29 @@
         <p class="waitlist-noscript">JavaScript is off. Submitting will leave Sphere and show a plain confirmation from Loops.</p>
       </noscript>
       <div class="waitlist-fields" id="waitlist-fields-hero" data-waitlist-fields>
-        <label class="visually-hidden" for="waitlist-email-hero">Email address</label>
-        <input
-          id="waitlist-email-hero"
-          type="email"
-          name="email"
-          autocomplete="email"
-          inputmode="email"
-          placeholder="you@example.com"
-          required
-          data-waitlist-email
-        >
+        <label class="field-label" for="waitlist-email-hero">Email address</label>
+        <div class="field-row">
+          <input
+            id="waitlist-email-hero"
+            type="email"
+            name="email"
+            autocomplete="email"
+            inputmode="email"
+            required
+            data-waitlist-email
+          >
+          <button type="submit" data-waitlist-submit>Join the waitlist</button>
+        </div>
         <input
           type="hidden"
           name="mailingLists"
           value="cmsl9ohw41xax0jzg5lq41in9"
           data-waitlist-list
         >
-        <button type="submit" data-waitlist-submit>Join the waitlist</button>
       </div>
       <p class="waitlist-consent" data-waitlist-details>
-        By joining, you agree to receive Sphere product and launch emails.
-        Unsubscribe anytime. <a href="/privacy">Privacy</a>
+        Product and launch emails only. Unsubscribe anytime.
+        <a href="/privacy">Privacy</a>
       </p>
       <p
         class="waitlist-status"
@@ -89,106 +95,43 @@
         data-waitlist-status
       ></p>
     </form>
-          <p class="availability">For macOS <span aria-hidden="true">·</span> Coming soon</p>
-        </div>
-        <div class="waitlist-sphere" aria-hidden="true">
-          <canvas
-            class="sphere-canvas"
-            data-sphere
-            data-dots="1280"
-          ></canvas>
         </div>
       </div>
     </section>
 
-    <section class="value-section" aria-labelledby="value-heading">
-      <div class="wrap">
-        <p class="eyebrow">Focus without the lists</p>
-        <h2 id="value-heading">Stay with the work, wherever it takes you.</h2>
-        <div class="value-grid">
-          <article>
-            <span aria-hidden="true">01</span>
-            <h3>Describe your focus</h3>
-            <p>Tell Sphere what kind of work deserves your attention.</p>
-          </article>
-          <article>
-            <span aria-hidden="true">02</span>
-            <h3>Work across pages and apps</h3>
-            <p>Sphere considers each page and window in the context of that work.</p>
-          </article>
-          <article>
-            <span aria-hidden="true">03</span>
-            <h3>Notice the drift</h3>
-            <p>When something does not belong, the sphere changes and brings you back.</p>
-          </article>
-        </div>
+    <section class="strip" aria-labelledby="how-heading">
+      <h2 class="strip-label" id="how-heading">How it works</h2>
+      <div class="strip-item">
+        <h3>Choose the work</h3>
+        <p>Tell Sphere what deserves your attention right now.</p>
+      </div>
+      <div class="strip-item">
+        <h3>Sphere reads the context</h3>
+        <p>Each page and app is checked against the work you chose.</p>
+      </div>
+      <div class="strip-item">
+        <h3>See when you drift</h3>
+        <p>The sphere on your screen changes shape when something doesn’t belong.</p>
       </div>
     </section>
 
-    <section class="waitlist-closing section-dark" aria-labelledby="closing-heading">
-      <div class="wrap waitlist-closing-inner">
-        <p class="eyebrow">Sphere for macOS</p>
-        <h2 id="closing-heading">A calmer way to stay with the work.</h2>
-        <p>Join the waitlist and we'll let you know when Sphere is ready.</p>
-
-    <form
-      class="waitlist-form"
-      method="post"
-      action="https://app.loops.so/api/newsletter-form/cmsl8u2a20rrb0j4fygyi262e"
-      data-waitlist-form
-      data-placement="closing"
-      aria-describedby="waitlist-status-closing"
-    >
-      <noscript>
-        <p class="waitlist-noscript">JavaScript is off. Submitting will leave Sphere and show a plain confirmation from Loops.</p>
-      </noscript>
-      <div class="waitlist-fields" id="waitlist-fields-closing" data-waitlist-fields>
-        <label class="visually-hidden" for="waitlist-email-closing">Email address</label>
-        <input
-          id="waitlist-email-closing"
-          type="email"
-          name="email"
-          autocomplete="email"
-          inputmode="email"
-          placeholder="you@example.com"
-          required
-          data-waitlist-email
-        >
-        <input
-          type="hidden"
-          name="mailingLists"
-          value="cmsl9ohw41xax0jzg5lq41in9"
-          data-waitlist-list
-        >
-        <button type="submit" data-waitlist-submit>Join the waitlist</button>
-      </div>
-      <p class="waitlist-consent" data-waitlist-details>
-        By joining, you agree to receive Sphere product and launch emails.
-        Unsubscribe anytime. <a href="/privacy">Privacy</a>
-      </p>
-      <p
-        class="waitlist-status"
-        id="waitlist-status-closing"
-        role="status"
-        aria-live="polite"
-        tabindex="-1"
-        data-waitlist-status
-      ></p>
-    </form>
+    <section class="sees" aria-labelledby="sees-heading">
+      <div class="sees-sheet">
+        <h2 id="sees-heading">What Sphere sees</h2>
+        <p>
+          Sphere doesn’t capture screenshots or read page contents. It uses
+          page and app titles and URLs to judge whether they match the focus
+          you described. New judgments are processed securely; verdicts,
+          corrections, and diagnostic history are stored locally on your Mac.
+        </p>
       </div>
     </section>
 
     </main>
 
     <footer class="site-footer prelaunch-footer">
-      <div class="wrap footer-grid">
-        <div>
-          <a class="brand footer-brand" href="/">
-            <span class="brand-mark" aria-hidden="true"></span>
-            <span>Sphere</span>
-          </a>
-          <p>A quiet guard for your attention.</p>
-        </div>
+      <div class="footer-grid">
+        <a class="brand footer-brand" href="/">Sphere</a>
         <nav class="footer-links" aria-label="Privacy and support">
           <a href="/privacy">Privacy</a><a href="/support">Support</a>
         </nav>

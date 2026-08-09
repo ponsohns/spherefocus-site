@@ -39,6 +39,15 @@ function mountSphere(canvas) {
     240,
     Number.parseInt(canvas.dataset.dots ?? "900", 10),
   );
+  // Ink mode: dark dots on a light page, no halo — a printed figure rather
+  // than a glowing object. Opted into per canvas; release pages never set it.
+  const ink = canvas.dataset.ink ?? "";
+  // Drift mode: a rare, slow swell that briefly deforms the sphere — the
+  // product's core gesture, hinted. Also opt-in per canvas.
+  const driftCycle = canvas.dataset.drift !== undefined;
+  // Spin mode: drag to rotate, with a little inertia on release. Opt-in per
+  // canvas; release pages keep their non-interactive spheres.
+  const spinnable = canvas.dataset.spin !== undefined;
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
   /** @type {SpherePoint[]} */
   const points = [];
@@ -61,6 +70,11 @@ function mountSphere(canvas) {
   let pointerX = 0;
   let pointerY = 0;
   let visible = true;
+  let spinOffset = 0;
+  let spinVelocity = 0;
+  let dragging = false;
+  let lastDragX = 0;
+  let lastDragTime = 0;
 
   function size() {
     const rect = canvas.getBoundingClientRect();
@@ -87,27 +101,40 @@ function mountSphere(canvas) {
     const centerX = width / 2;
     const centerY = height / 2;
     const sphereRadius = Math.min(width, height) * 0.31;
+    if (!dragging && spinVelocity !== 0) {
+      spinOffset += spinVelocity;
+      spinVelocity *= 0.96;
+      if (Math.abs(spinVelocity) < 0.00002) spinVelocity = 0;
+    }
     const rotation = reducedMotion ? 0.52 : now * 0.000055;
     const tilt = -0.2 + pointerY * 0.08;
-    const turn = rotation + pointerX * 0.12;
+    const turn = rotation + spinOffset + pointerX * 0.12;
     const cosTurn = Math.cos(turn);
     const sinTurn = Math.sin(turn);
     const cosTilt = Math.cos(tilt);
     const sinTilt = Math.sin(tilt);
 
-    const halo = drawing.createRadialGradient(
-      centerX,
-      centerY,
-      sphereRadius * 0.18,
-      centerX,
-      centerY,
-      sphereRadius * 1.7,
-    );
-    halo.addColorStop(0, "rgba(116,178,240,0.07)");
-    halo.addColorStop(0.48, "rgba(116,178,240,0.025)");
-    halo.addColorStop(1, "rgba(116,178,240,0)");
-    drawing.fillStyle = halo;
-    drawing.fillRect(0, 0, width, height);
+    if (!ink) {
+      const halo = drawing.createRadialGradient(
+        centerX,
+        centerY,
+        sphereRadius * 0.18,
+        centerX,
+        centerY,
+        sphereRadius * 1.7,
+      );
+      halo.addColorStop(0, "rgba(116,178,240,0.07)");
+      halo.addColorStop(0.48, "rgba(116,178,240,0.025)");
+      halo.addColorStop(1, "rgba(116,178,240,0)");
+      drawing.fillStyle = halo;
+      drawing.fillRect(0, 0, width, height);
+    }
+
+    let sway = 0;
+    if (driftCycle && !reducedMotion) {
+      const wave = Math.sin(now * 0.00024);
+      sway = wave > 0 ? Math.pow(wave, 6) : 0;
+    }
 
     for (const point of points) {
       const x1 = point.x * cosTurn + point.z * sinTurn;
@@ -118,16 +145,24 @@ function mountSphere(canvas) {
       const breathing = reducedMotion
         ? 1
         : 1 + Math.sin(now * 0.0007 + point.y * 2.4) * 0.006;
-      const px = centerX + x1 * sphereRadius * breathing;
-      const py = centerY + y2 * sphereRadius * breathing;
+      let px = centerX + x1 * sphereRadius * breathing;
+      let py = centerY + y2 * sphereRadius * breathing;
+      if (sway > 0) {
+        px +=
+          Math.sin(point.y * 5.3 + now * 0.0011) * sway * sphereRadius * 0.05;
+        py +=
+          Math.sin(point.x * 4.1 + point.z * 3.7 + now * 0.0009) *
+          sway *
+          sphereRadius *
+          0.04;
+      }
       const dotSize = (0.35 + Math.pow(depth, 1.65) * 1.25) * dpr;
       const keyLight = Math.max(0.15, 0.58 + x1 * -0.18 + y2 * -0.24);
-      const alpha = Math.min(
-        0.95,
-        (0.05 + Math.pow(depth, 2) * 0.88) * keyLight,
-      );
+      const alpha = ink
+        ? Math.min(0.95, 0.1 + Math.pow(depth, 1.75) * 0.85)
+        : Math.min(0.95, (0.05 + Math.pow(depth, 2) * 0.88) * keyLight);
       drawing.globalAlpha = alpha;
-      drawing.fillStyle = depth > 0.72 ? "#f2f6fc" : "#b9c9dd";
+      drawing.fillStyle = ink || (depth > 0.72 ? "#f2f6fc" : "#b9c9dd");
       drawing.beginPath();
       drawing.arc(px, py, dotSize, 0, Math.PI * 2);
       drawing.fill();
@@ -146,6 +181,48 @@ function mountSphere(canvas) {
     pointerX = 0;
     pointerY = 0;
   });
+
+  if (spinnable) {
+    canvas.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      spinVelocity = 0;
+      lastDragX = event.clientX;
+      lastDragTime = event.timeStamp;
+      try {
+        canvas.setPointerCapture(event.pointerId);
+      } catch {
+        // A pointer that vanished between the event and the capture still
+        // spins; it just loses tracking outside the canvas.
+      }
+    });
+    canvas.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      const deltaX = event.clientX - lastDragX;
+      const elapsed = Math.max(1, event.timeStamp - lastDragTime);
+      const step = deltaX * 0.005;
+      spinOffset += step;
+      spinVelocity = step / (elapsed / 16.7);
+      lastDragX = event.clientX;
+      lastDragTime = event.timeStamp;
+      // Without the animation loop, direct manipulation still redraws.
+      if (reducedMotion) draw(0);
+    });
+    /** @param {PointerEvent} event */
+    const release = (event) => {
+      if (!dragging) return;
+      dragging = false;
+      try {
+        if (canvas.hasPointerCapture(event.pointerId)) {
+          canvas.releasePointerCapture(event.pointerId);
+        }
+      } catch {
+        // Releasing a vanished pointer is a no-op.
+      }
+      if (reducedMotion) spinVelocity = 0;
+    };
+    canvas.addEventListener("pointerup", release);
+    canvas.addEventListener("pointercancel", release);
+  }
 
   const observer = new IntersectionObserver((entries) => {
     visible = entries.some((entry) => entry.isIntersecting);
