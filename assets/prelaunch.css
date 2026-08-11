@@ -704,18 +704,6 @@ h1 {
   color: var(--on-ink);
 }
 
-.support-safety {
-  margin-top: 28px;
-  color: var(--ink-70);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.support-safety strong {
-  color: var(--ink);
-  font-weight: 600;
-}
-
 .support-response {
   margin-top: 20px;
 }
